@@ -12,6 +12,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.java linguist-generated=false
 
 ### IntelliJ IDEA ###
 .idea
