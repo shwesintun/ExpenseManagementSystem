@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Expenses Management System</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="easy-number-separator.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<style type="text/css">
+		.center-header {
+			text-align: center;
+			padding: 20px 0;
+			background-color: #9ad4ed;
+			height: 65px;
+		}
+		.custom-margin {
+            margin-right: 500px; /* Adjust this value for your desired spacing */
+        }
+	</style>
+</head>
+
+<body>
+	<div class="center-header">
+		<h3>家計管理</h3>
+	</div><br>
+	<div class="label-button container-fluid">
+		<div class="d-flex justify-content-center align-items-center">
+			<span class="custom-margin">家計費一覧</span>
+			<a th:href="@{/add}" class="btn btn-primary" style="border-radius: 10px;">
+				<i class="fa fa-plus-circle" aria-hidden="true" style="margin-right: 5px; font-size: 1.2em;"></i>追加
+			</a>
+		</div>
+	</div>
+	<br>
+	<div th:each="expense,index:${expenseList}">
+		<a th:href="@{/detail/{year}/{month}(year=${expense.year},month=${expense.month})}"
+			style="text-decoration: none;">
+
+			<div class="expense-summary centered-form">
+				<div class="expense-details">
+					<span class="expense-date" th:text="${expense.year} + '/' + ${expense.month}"></span>
+					<span class="expense-cost" th:text="${expense.cost} + ' JPY'"></span>
+				</div>
+				<span class="expense-arrow">></span>
+			</div>
+
+
+		</a>
+	</div>
+
+</body>
+
+</html>

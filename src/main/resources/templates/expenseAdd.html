@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+	<style>
+		.center-header {
+			text-align: center;
+			padding: 20px 0;
+			background-color: #9ad4ed;
+			height: 65px;
+		}
+
+		.custom-margin {
+			margin-right: 500px;
+
+		}
+
+		.myDiv {
+			border: 2px outset rgb(0, 0, 0);
+			background-color: rgb(222, 222, 222);
+			text-align: center;
+			width: 40%;
+			border-radius: 10px;
+		}
+
+		.centered-form {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.button {
+			background-color: #0d70f2;
+			border: none;
+			color: rgb(233, 236, 240);
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 15px;
+			margin: 10px 2px;
+			cursor: pointer;
+			width: 40%;
+			height: 43px;
+		}
+
+		.button {
+			border-radius: 5px;
+		}
+
+		.radio-group {
+			display: flex;
+			flex-direction: row;
+			margin-top: 5px;
+		}
+
+		.radio-group label {
+			margin-right: 10px;
+		}
+
+		.forDiv {
+			border: 2px solid #ccc;
+			padding: 10px;
+			border-radius: 9px;
+			width: 600px;
+			margin-top: 17px;
+		}
+		
+		.error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+	</style>
+	
+
+
+	<script>
+		$(document).ready(function () {
+			$('#cancelButton').click(function () {
+				// Clear the form fields when the cancel button is clicked
+				$('#expenseForm')[0].reset();
+			});
+
+			$('#createButton').click(function (event) {
+				var itemName = $('[name="item"]').val();
+				var cost = $('[name="cost"]').val();
+
+
+
+			});
+
+		});
+	</script>
+</head>
+
+<body>
+	<div class="center-header">
+		<h3>家計管理</h3>
+	</div><br>
+
+	<div class="label-button container-fluid">
+
+		<div class="d-flex justify-content-center align-items-center">
+			<span class="custom-margin">
+				<a th:href="@{/}" style="text-decoration: none;">家計費一覧</a> /
+				<a th:href="@{/add}" style="text-decoration: none; color: black;">登録</a>
+			</span>
+		</div>
+	</div>
+
+
+	<div class="container mt-4 d-flex justify-content-center align-items-center" 　>
+		<form th:each="detail,index:${form}" th:action="@{/add}" method="post" th:object="${form}" id="expenseForm" style="width: 600px;margin-top: 43px;">
+
+
+			<div class="forDiv">
+				<div class="mb-3">
+					<label for="dateInput" class="form-label">日付</label>
+					<div class="input-group">
+						<input type="date" class="form-control" id="dateInput" name="inputdate" th:value="${inputdate}"
+							required >
+						<span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+					</div>
+				</div>
+
+
+				<div class="mb-3">
+					<label for="itemInput" class="form-label">項目</label>
+					<div class="input-group">
+						<input type="text" class="form-control" id="itemInput" name="item" th:value="${detail.item}">
+					</div>
+					<small class="error-message" th:if="${#fields.hasErrors('item')}" th:errors="*{item}"></small>
+				</div>
+
+
+
+				<div class="mb-3">
+					<label for="costInput" class="form-label">費用</label>
+					<div class="input-group">
+						<input type="text" class="form-control" id="costInput" name="cost"
+							th:value="${detail.cost == 0.0 ? '' : detail.cost}">
+
+						<span class="input-group-text">¥</span>
+						<small class="error-message" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></small>
+					</div>
+				</div>
+			</div>
+			<div style="margin-top: 23px;width:600px">
+				<a th:href="@{/update/{id}(id=${detail.id})}" class="btn btn-secondary"
+					style="height:35px;width: 250px;border: 0.1pc;border-radius: 7px; background-color: #c98c30;">キャンセル</a>
+				<input type="submit" id="createButton"
+					style="margin-left: 95px;height:35px;width: 250px;border: 0.1pc;border-radius: 7px; background-color: #0d70f2;color: white;"
+					value="登録">
+			</div>
+
+		</form>
+
+		<script>
+			flatpickr(".form-control[data-input]", {
+				dateFormat: "Y/m/d", // Use the Japanese format
+				locale: "ja", // Set the locale to Japanese
+			});
+		</script>
+</body>
+
+</html>

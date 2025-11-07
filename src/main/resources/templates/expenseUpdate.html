@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Expenses Management System</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<style type="text/css">
+		.center-header {
+			text-align: center;
+			padding: 20px 0;
+			background-color: #9ad4ed;
+			height: 65px;
+		}
+
+		.custom-margin {
+			margin-right: 500px;
+
+		}
+
+		.myDiv {
+			border: 2px outset rgb(0, 0, 0);
+			background-color: rgb(222, 222, 222);
+			text-align: center;
+			width: 40%;
+			border-radius: 10px;
+		}
+
+		.centered-form {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.button {
+			background-color: #0d70f2;
+			border: none;
+			color: rgb(233, 236, 240);
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 15px;
+			margin: 10px 2px;
+			cursor: pointer;
+			width: 40%;
+			height: 43px;
+		}
+
+		.button {
+			border-radius: 5px;
+		}
+
+		.radio-group {
+			display: flex;
+			flex-direction: row;
+			margin-top: 5px;
+		}
+
+		.radio-group label {
+			margin-right: 10px;
+		}
+
+		.forDiv {
+			border: 2px solid #ccc;
+			padding: 10px;
+			border-radius: 9px;
+			width: 600px;
+			margin-top: 17px;
+		}
+
+		.error-message {
+			color: red;
+			font-size: 14px;
+			margin-top: 5px;
+		}
+
+		#validationMessage {
+			color: red;
+			font-size: 14px;
+			margin-top: 10px;
+			margin-left: 213px;
+		}
+	</style>
+	<script>
+		$(document).ready(function () {
+
+			$('#cancelButton').click(function () {
+				// Clear the form fields when the cancel button is clicked
+				$('#expenseForm')[0].reset();
+			});
+
+			$('#createButton').click(function (event) {
+				var itemName = $('[name="item"]').val();
+				var cost = $('[name="cost"]').val();
+
+				var validationMessage = '';
+
+				if (itemName.trim() === '') {
+					validationMessage = 'Item must not be empty!';
+				}
+
+				if (cost.trim() === '') {
+					validationMessage = 'Cost must not be empty';
+				} else if (isNaN(cost)) {
+					validationMessage = 'Cost must be valid number!';
+				}
+
+				$('#validationMessage').text(validationMessage);
+
+				if (validationMessage !== '') {
+					event.preventDefault();
+				}
+			});
+		});
+
+
+	</script>
+
+</head>
+
+<body>
+	<div class="center-header">
+		<h3>家計管理</h3>
+	</div>
+	<br>
+	<div class="label-button container-fluid">
+
+		<div class="d-flex justify-content-center align-items-center">
+			<span class="custom-margin">
+				<a th:href="@{/}" style="text-decoration: none;">家計費一覧</a> /
+				<a th:href="@{/add}" style="text-decoration: none; color: black;">更新</a>
+			</span>
+		</div>
+	</div>
+
+	<div class="centered-form">
+		<!--body><div th:each="detail,index:${detail}" class="centered-form">-->
+		<form th:action="@{/updateConfirm}" method="post" th:object="${form}" id="expenseForm"
+			style="width: 600px;margin-top:43px">
+			<div class="forDiv">
+				<div class="mb-3">
+					<label style="margin-left:10px;" class="form-label">日付</label> <br>
+					<div class="input-group">
+						<input type="date" class="form-control" name="inputdate" th:value="${inputdate}">
+						<span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+					</div>
+				</div>
+
+				<div class="mb-3">
+					<label style="margin-left:10px;" class="form-label">項目</label><br>
+					<div class="input-group">
+						<input type="text" class="form-control" name="item" th:value="${detail.item}">
+					</div>
+					<!--<small class="error-message" th:if="${#fields.hasErrors('item')}" th:errors="*{item}"></small>-->
+				</div>
+
+				<div class="mb-3">
+					<label style="margin-left:10px;" class="form-label">費用</label><br>
+					<div class="input-group">
+						<input type="hidden" name="id" th:value="${detail.id}">
+						<input type="text" class="form-control" name="cost" th:value="${detail.cost}">
+						<!--<small class="error-message" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></small>-->
+						<span class="input-group-text">¥</span>
+					</div>
+				</div>
+			</div>
+			<div style="margin-top: 23px;width:600px">
+				<a th:href="@{/update/{id}(id=${detail.id})}" class="btn btn-secondary"
+					style="height:35px;width: 250px;border: 0.1pc;border-radius: 7px; background-color: #c98c30;">キャンセル</a>
+				<input type="submit" id="createButton"
+					style="margin-left: 95px;height:35px;width: 250px;border: 0.1pc;border-radius: 7px; background-color: #0d70f2;color: white;"
+					value="変更">
+			</div>
+
+			<div id="validationMessage"></div>
+		</form>
+	</div>
+
+
+</body>
+
+</html>
